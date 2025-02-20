@@ -7,9 +7,11 @@
 
 %%
 
-[ \t\n]+                 ;
 "//".*                   { printf("This is a single-line comment: %s\n", yytext); }
-"/*"([^*]|\*+[^*/])*\*+"/" { printf("This is a multi-line comment: %s\n", yytext); }
+
+"/*"[^*]*"*/" { printf("This is a multi-line comment: %s\n", yytext); }
+[ \t\n]+                 ;
+
 
 (auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while) { 
     printf("Keyword: %s\n", yytext); 
@@ -21,10 +23,13 @@
 
 [0-9]+\.[0-9]+ | [0-9]+ { printf("Constant: %s\n", yytext); }  
 
-'([^'\\]|\\.)' { printf("Character: %s\n", yytext); }  
-\"([^\"\\]|\\.)*\" { printf("String: %s\n", yytext); }
+'[a-zA-Z0-9\_]' { printf("Character literal: %s\n", yytext); } 
+ 
+"\"".*"\"" {printf("String literal: %s\n",yytext);}
 
 [{}()\[\],;] { printf("Punctuation: %s\n", yytext); }
+
+. {printf("unknown token %s\n",yytext);}
 
 %%
 
